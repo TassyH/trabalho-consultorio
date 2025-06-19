@@ -70,7 +70,7 @@ class EspecialidadeController{
       }
 
       await EspecialidadeRepository.delete(id);
-      response.sendStatus(204);
+      response.status(204).json({message: "excluido com sucesso"});
   }
 
 }

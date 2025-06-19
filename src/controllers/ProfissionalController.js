@@ -72,7 +72,7 @@ class PacienteController{
       }
 
       await ProfissionalRepository.delete(id);
-      response.status(204);
+      response.status(204).json({message: "excluido com sucesso"});
   }
 
 }

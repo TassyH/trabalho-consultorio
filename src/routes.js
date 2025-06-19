@@ -3,6 +3,8 @@ const {Router} = require("express");
 const EspecialidadeController = require("./controllers/EspecialidadeController");
 const PacienteController = require("./controllers/PacienteController");
 const ProfissionalController = require("./controllers/ProfissionalController");
+const AtendimentoController = require("./controllers/AtendimentoController");
+
 
 
 const routes = Router();
@@ -29,6 +31,12 @@ routes.get("/profissional/:id", ProfissionalController.show);
 routes.post("/profissional", ProfissionalController.store);
 routes.put("/profissional/:id", ProfissionalController.update);
 routes.delete("/profissional/:id", ProfissionalController.delete)
+
+routes.get("/atendimento", AtendimentoController.index);
+routes.get("/atendimento/:id", AtendimentoController.show);
+routes.post("/atendimento", AtendimentoController.store);
+routes.put("/atendimento/:id", AtendimentoController.update);
+routes.delete("/atendimento/:id", AtendimentoController.delete)
 
 
 
