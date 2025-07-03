@@ -16,8 +16,10 @@ class AtendimentoRepository{
   }
 
   async create({paciente_id, profissional_id, data_atendimento, diagnostico}) {
+      const diagnosticoTratado = diagnostico === undefined ? null : diagnostico;
+
       const result = await db.query(`insert into atendimentos (paciente_id, profissional_id, data_atendimento, diagnostico) values (?, ?,?,?)`,
-      [paciente_id, profissional_id, data_atendimento, diagnostico])
+      [paciente_id, profissional_id, data_atendimento, diagnosticoTratado])
 
       const insertedId = result.insertId
       return {
