@@ -1,8 +1,10 @@
 const express = require("express");
+const cors = require('cors')
 const db = require("./models/ConnectDatabase");
 const routes = require("./routes");
 
 const app = express();
+app.use(cors());
 const port = 3000;
 
 // Conexão com o banco de dados
