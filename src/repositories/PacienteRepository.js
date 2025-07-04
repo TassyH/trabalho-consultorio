@@ -16,9 +16,15 @@ class PacienteRepository{
   }
 
   async findByNome(nome){
-        const [row] = await db.query(`SELECT * FROM pacientes WHERE nome = ? 
-          `,
+        const [row] = await db.query(`SELECT * FROM pacientes WHERE nome = ?`,
         [nome]
+      )
+         return row;
+    }
+
+   async findByCPF(cpf){
+        const [row] = await db.query(`SELECT * FROM pacientes WHERE cpf = ?`,
+        [cpf]
       )
          return row;
     }
@@ -47,8 +53,7 @@ class PacienteRepository{
   }
 
   async delete(id){
-     const deleteItem = await db.query(`DELETE FROM pacientes WHERE id = ? 
-      `,
+     const deleteItem = await db.query(`DELETE FROM pacientes WHERE id = ?`,
       [id]
     )
        return deleteItem;

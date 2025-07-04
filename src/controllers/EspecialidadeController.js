@@ -61,17 +61,21 @@ class EspecialidadeController{
 
   }
 
-  async delete(request, response){
-    //Deletar um registro
-      const {id} = request.params;
+async delete(req, res) {
+  try {
+    await EspecialidadeRepository.delete(req.params.id);
+    res.sendStatus(204); // OK - sem conteúdo
+  } catch (error) {
+    if (error.code === 'ER_ROW_IS_REFERENCED_2' || error.errno === 1451) {
+      return res.status(400).json({
+        error: 'Esta especialidade está vinculada a um ou mais profissionais e não pode ser excluída.'
+      });
+    }
 
-      if(!id){
-        return response.status(400).json({message: "id de especialidade invalido"})
-      }
-
-      await EspecialidadeRepository.delete(id);
-      response.status(204).json({message: "excluido com sucesso"});
+    console.error('Erro ao excluir especialidade:', error);
+    res.status(500).json({ error: 'Erro interno no servidor.' });
   }
+}
 
 }
 
