@@ -53,38 +53,35 @@ class PacienteController{
 
     }
 
-  async update(request, response){
-    //Atualizar um registro
-      //Atualizar um registro
-     const {id} = request.params;
-     const {nome, cpf, data_nascimento, telefone, email, endereco} = request.body;
+  async update(request, response) {
+    const {id} = request.params;
+    const {nome, cpf, data_nascimento, telefone, email, endereco} = request.body;
 
-     const pac = await PacienteRepository.findById(id);
-     if(!pac){
-      return response.status(404).json({error: "contato nao encontrado"})
-     }
+    const pac = await PacienteRepository.findById(id);
+    if(!pac) {
+        return response.status(404).json({error: "paciente nao encontrado"});
+    }
 
-     if(nome){
+    if(nome && nome !== pac.nome) {  // Só verifica se o nome foi alterado
         const pacienteByNome = await PacienteRepository.findByNome(nome);
-
-        if(pacienteByNome){
-          return response.status(400).json({error: "esse nome ja está sendo usado"});
+        
+        if(pacienteByNome && pacienteByNome.id !== id) {  // Verifica se o nome existe em outro paciente
+            return response.status(400).json({error: "esse nome ja está sendo usado"});
         }
-      }
+    }
 
-        await PacienteRepository.update(id, {
+    await PacienteRepository.update(id, {
         nome: nome ?? pac.nome,
         cpf: cpf ?? pac.cpf,
         data_nascimento: data_nascimento ?? pac.data_nascimento,
         telefone: telefone ?? pac.telefone,
         email: email ?? pac.email,
         endereco: endereco ?? pac.endereco
-      })
+    });
 
-      const upDatePac = await PacienteRepository.findById(id)
-      response.status(200).json(upDatePac);
-
-  }
+    const upDatePac = await PacienteRepository.findById(id);
+    response.status(200).json(upDatePac);
+}
 
 async delete(req, res) {
   try {
