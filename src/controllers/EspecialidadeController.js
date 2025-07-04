@@ -3,7 +3,6 @@ const EspecialidadeRepository = require('../repositories/EspecialidadeRepository
 class EspecialidadeController{
 
   async index (request, response){
-    //Listar todos os registros
     const especialidade = await EspecialidadeRepository.findAll();
     response.json(especialidade);
   }
@@ -20,23 +19,16 @@ class EspecialidadeController{
   }
 
   async store(request, response){
-      //Criar um novo registro
         const {descricao} = request.body;
-  
         if(!descricao){
           return response.status(403).json({error: "O nome da categoria precisa ser informado"})
         }
-  
-       
         const especialidade = await EspecialidadeRepository.create({descricao});
-  
         response.status(201).json(especialidade);
-  
     }
 
   async update(request, response){
-    //Atualizar um registro
-      //Atualizar um registro
+  
      const {id} = request.params;
      const {descricao} = request.body;
 
@@ -64,7 +56,7 @@ class EspecialidadeController{
 async delete(req, res) {
   try {
     await EspecialidadeRepository.delete(req.params.id);
-    res.sendStatus(204); // OK - sem conteúdo
+    res.sendStatus(204); 
   } catch (error) {
     if (error.code === 'ER_ROW_IS_REFERENCED_2' || error.errno === 1451) {
       return res.status(400).json({

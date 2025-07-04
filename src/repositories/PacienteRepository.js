@@ -28,7 +28,6 @@ class PacienteRepository {
       const cleanCpf = cpf.toString().replace(/\D/g, '');
       console.log('CPF normalizado:', cleanCpf);
 
-      // MODIFICAÇÃO AQUI - use query direta sem destructuring
       const rows = await db.query(
         `SELECT * FROM pacientes WHERE cpf = ?`,
         [cleanCpf]
@@ -36,7 +35,6 @@ class PacienteRepository {
 
       console.log('Registros encontrados:', rows);
 
-      // MODIFICAÇÃO IMPORTANTE - retorne o primeiro registro ou null
       return rows && rows.length > 0 ? rows[0] : null;
 
     } catch (error) {

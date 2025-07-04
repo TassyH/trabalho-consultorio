@@ -3,7 +3,6 @@ const PacienteRepository = require('../repositories/PacienteRepository');
 class PacienteController{
 
   async index (request, response){
-    //Listar todos os registros
     const paciente = await PacienteRepository.findAll();
     response.json(paciente);
   }
@@ -42,7 +41,6 @@ class PacienteController{
 }
 
   async store(request, response){
-      //Criar um novo registro
         const {nome, cpf, data_nascimento, telefone, email, endereco} = request.body;
   
         if(!nome || !cpf || !data_nascimento ){
@@ -62,12 +60,9 @@ class PacienteController{
         return response.status(404).json({error: "paciente nao encontrado"});
     }
 
-    if(nome && nome !== pac.nome) {  // Só verifica se o nome foi alterado
+    if(nome && nome !== pac.nome) {  
         const pacienteByNome = await PacienteRepository.findByNome(nome);
         
-        if(pacienteByNome && pacienteByNome.id !== id) {  // Verifica se o nome existe em outro paciente
-            return response.status(400).json({error: "esse nome ja está sendo usado"});
-        }
     }
 
     await PacienteRepository.update(id, {
@@ -86,7 +81,7 @@ class PacienteController{
 async delete(req, res) {
   try {
     await PacienteRepository.delete(req.params.id)
-    res.sendStatus(204) // Sucesso, sem conteúdo
+    res.sendStatus(204)
   } catch (error) {
     if (error.code === 'ER_ROW_IS_REFERENCED_2' || error.code === 'ER_ROW_IS_REFERENCED') {
       return res.status(400).json({

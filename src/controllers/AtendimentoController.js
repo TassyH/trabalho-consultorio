@@ -3,7 +3,6 @@ const AtendimentoRepository = require('../repositories/AtendimentoRepository');
 class AtendimentoController{
 
   async index (request, response){
-    //Listar todos os registros
     const prof = await AtendimentoRepository.findAll();
     response.json(prof);
   }
@@ -20,7 +19,6 @@ class AtendimentoController{
   }
 
   async store(request, response){
-      //Criar um novo registro
         const {paciente_id, profissional_id, data_atendimento, diagnostico} = request.body;
   
         if(!paciente_id || !profissional_id ){
@@ -67,7 +65,6 @@ class AtendimentoController{
     }
 }
   async delete(request, response){
-    //Deletar um registro
       const {id} = request.params;
 
       if(!id){

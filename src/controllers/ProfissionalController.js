@@ -3,7 +3,6 @@ const ProfissionalRepository = require('../repositories/ProfissionalRepository')
 class PacienteController{
 
   async index (request, response){
-    //Listar todos os registros
     const prof = await ProfissionalRepository.findAll();
     response.json(prof);
   }
@@ -20,7 +19,6 @@ class PacienteController{
   }
 
   async store(request, response){
-      //Criar um novo registro
         const {nome, crm, especialidade_id, telefone, email} = request.body;
   
         if(!nome || !crm ){
@@ -35,13 +33,11 @@ class PacienteController{
     const {id} = request.params;
     const {nome, crm, especialidade_id, telefone, email} = request.body;
 
-    // Busca o profissional existente
     const prof = await ProfissionalRepository.findById(id);
     if(!prof) {
         return response.status(404).json({error: "Profissional não encontrado"});
     }
 
-    // Verifica se o nome foi alterado e se já existe
     if(nome && nome !== prof.nome) {
         const profByNome = await ProfissionalRepository.findByNome(nome);
         if(profByNome && profByNome.id !== id) {
@@ -49,7 +45,6 @@ class PacienteController{
         }
     }
 
-    // Verifica se o CRM foi alterado e se já existe
     if(crm && crm !== prof.crm) {
         const profByCrm = await ProfissionalRepository.findByCrm(crm);
         if(profByCrm && profByCrm.id !== id) {
@@ -57,7 +52,6 @@ class PacienteController{
         }
     }
 
-    // Verifica se o email foi alterado e se já existe
     if(email && email !== prof.email) {
         const profByEmail = await ProfissionalRepository.findByEmail(email);
         if(profByEmail && profByEmail.id !== id) {
@@ -65,7 +59,6 @@ class PacienteController{
         }
     }
 
-    // Atualiza os dados
     await ProfissionalRepository.update(id, {
         nome: nome ?? prof.nome,
         crm: crm ?? prof.crm,
@@ -74,7 +67,6 @@ class PacienteController{
         email: email ?? prof.email,
     });
 
-    // Retorna o profissional atualizado
     const updatedProf = await ProfissionalRepository.findById(id);
     response.status(200).json(updatedProf);
 }
