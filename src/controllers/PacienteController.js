@@ -19,15 +19,15 @@ class PacienteController{
   
   }
 
-  async showCpf(request, response){
-    const {cpf} = request.params;
-    const paciente = await PacienteRepository.findByCPF(cpf);
+  async showCpf(req, res) {
+    const cpf = req.params.cpf
+    const paciente = await PacienteRepository.findByCpf(cpf)
+    
+    if (!paciente) {
+      return res.status(404).json({ error: 'Paciente não encontrado' })
+    }
 
-     if(!paciente){
-        return response.status(404).json({error: "paciente nao encontrado"});
-        }
-     response.json(paciente);
-  
+    res.json(paciente)
   }
 
   async store(request, response){

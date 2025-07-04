@@ -21,7 +21,7 @@ routes.delete("/especialidade/:id", EspecialidadeController.delete)
 //Category routes
 routes.get("/paciente", PacienteController.index);
 routes.get("/paciente/:id", PacienteController.show);
-routes.get("/paciente/:cpf", PacienteController.showCpf);
+routes.get("/paciente/cpf/:cpf", PacienteController.showCpf);
 routes.post("/paciente", PacienteController.store);
 routes.put("/paciente/:id", PacienteController.update);
 routes.delete("/paciente/:id", PacienteController.delete)
@@ -33,6 +33,7 @@ routes.post("/profissional", ProfissionalController.store);
 routes.put("/profissional/:id", ProfissionalController.update);
 routes.delete("/profissional/:id", ProfissionalController.delete)
 
+//Category routes
 routes.get("/atendimento", AtendimentoController.index);
 routes.get("/atendimento/:id", AtendimentoController.show);
 routes.post("/atendimento", AtendimentoController.store);
