@@ -20,15 +20,26 @@ class PacienteController{
   }
 
   async showCpf(req, res) {
-    const cpf = req.params.cpf
-    const paciente = await PacienteRepository.findByCpf(cpf)
+  try {
+    const { cpf } = req.params;
     
+    if (!cpf) {
+      return res.status(400).json({ error: "Parâmetro 'cpf' é obrigatório" });
+    }
+    console.log('CPF recebido:', cpf);
+    const paciente = await PacienteRepository.findByCpf(cpf);
+    console.log('Paciente encontrado:', paciente); 
     if (!paciente) {
-      return res.status(404).json({ error: 'Paciente não encontrado' })
+      return res.status(404).json({ error: 'Paciente não encontrado' });
     }
 
-    res.json(paciente)
+    return res.status(200).json(paciente);
+
+  } catch (error) {
+    console.error('Erro na busca por CPF:', error);
+    return res.status(500).json({ error: 'Erro interno no servidor' });
   }
+}
 
   async store(request, response){
       //Criar um novo registro
