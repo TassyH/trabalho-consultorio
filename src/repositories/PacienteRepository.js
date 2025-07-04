@@ -22,12 +22,19 @@ class PacienteRepository{
          return row;
     }
 
-   async findByCPF(cpf){
-        const [row] = await db.query(`SELECT * FROM pacientes WHERE cpf = ?`,
-        [cpf]
-      )
-         return row;
-    }
+   async findByCPF(cpf) {
+    // Remove formatação se existir
+    const cpfNumeros = cpf.replace(/\D/g, '');
+    
+    // Busca considerando CPF com ou sem formatação
+    const [rows] = await db.query(
+        `SELECT * FROM pacientes WHERE 
+        REPLACE(REPLACE(REPLACE(cpf, '.', ''), '-', ''), ' ', '') = ?`,
+        [cpfNumeros]
+    );
+    
+    return rows[0];
+}
 
   async create({nome, cpf, data_nascimento, telefone, email, endereco}) {
       const result = await db.query(`insert into pacientes (nome, cpf, data_nascimento,	telefone, email, endereco) values (?, ?,?,?,?,?)`,
