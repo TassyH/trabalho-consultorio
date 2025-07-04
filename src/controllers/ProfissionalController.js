@@ -31,37 +31,53 @@ class PacienteController{
 
     }
 
-  async update(request, response){
-    //Atualizar um registro
-      //Atualizar um registro
-     const {id} = request.params;
-     const {nome, crm, especialidade_id, telefone, email} = request.body;
+  async update(request, response) {
+    const {id} = request.params;
+    const {nome, crm, especialidade_id, telefone, email} = request.body;
 
-     const prof = await ProfissionalRepository.findById(id);
-     if(!prof){
-      return response.status(404).json({error: "prof nao encontrado"})
-     }
+    // Busca o profissional existente
+    const prof = await ProfissionalRepository.findById(id);
+    if(!prof) {
+        return response.status(404).json({error: "Profissional não encontrado"});
+    }
 
-     if(nome){
+    // Verifica se o nome foi alterado e se já existe
+    if(nome && nome !== prof.nome) {
         const profByNome = await ProfissionalRepository.findByNome(nome);
-
-        if(profByNome){
-          return response.status(400).json({error: "esse nome ja está sendo usado"});
+        if(profByNome && profByNome.id !== id) {
+            return response.status(400).json({error: "Este nome já está sendo usado por outro profissional"});
         }
-      }
+    }
 
-        await ProfissionalRepository.update(id, {
+    // Verifica se o CRM foi alterado e se já existe
+    if(crm && crm !== prof.crm) {
+        const profByCrm = await ProfissionalRepository.findByCrm(crm);
+        if(profByCrm && profByCrm.id !== id) {
+            return response.status(400).json({error: "Este CRM já está cadastrado para outro profissional"});
+        }
+    }
+
+    // Verifica se o email foi alterado e se já existe
+    if(email && email !== prof.email) {
+        const profByEmail = await ProfissionalRepository.findByEmail(email);
+        if(profByEmail && profByEmail.id !== id) {
+            return response.status(400).json({error: "Este email já está sendo usado por outro profissional"});
+        }
+    }
+
+    // Atualiza os dados
+    await ProfissionalRepository.update(id, {
         nome: nome ?? prof.nome,
         crm: crm ?? prof.crm,
         especialidade_id: especialidade_id ?? prof.especialidade_id,
         telefone: telefone ?? prof.telefone,
         email: email ?? prof.email,
-      })
+    });
 
-      const upDatePac = await ProfissionalRepository.findById(id)
-      response.status(200).json(upDatePac);
-
-  }
+    // Retorna o profissional atualizado
+    const updatedProf = await ProfissionalRepository.findById(id);
+    response.status(200).json(updatedProf);
+}
 
 async delete(req, res) {
   try {
