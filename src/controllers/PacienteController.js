@@ -19,6 +19,17 @@ class PacienteController{
   
   }
 
+  async showCpf(request, response){
+    const {cpf} = request.params;
+    const paciente = await PacienteRepository.findByCPF(cpf);
+
+     if(!paciente){
+        return response.status(404).json({error: "paciente nao encontrado"});
+        }
+     response.json(paciente);
+  
+  }
+
   async store(request, response){
       //Criar um novo registro
         const {nome, cpf, data_nascimento, telefone, email, endereco} = request.body;
@@ -64,17 +75,23 @@ class PacienteController{
 
   }
 
-  async delete(request, response){
-    //Deletar um registro
-      const {id} = request.params;
+async delete(req, res) {
+  try {
+    await PacienteRepository.delete(req.params.id)
+    res.sendStatus(204) // Sucesso, sem conteúdo
+  } catch (error) {
+    if (error.code === 'ER_ROW_IS_REFERENCED_2' || error.code === 'ER_ROW_IS_REFERENCED') {
+      return res.status(400).json({
+        error: 'Este paciente possui atendimentos vinculados e não pode ser excluído.'
+      })
+    }
 
-      if(!id){
-        return response.status(400).json({message: "id do paciente invalido"})
-      }
-
-      await PacienteRepository.delete(id);
-      response.status(204).json({message: "excluido com sucesso"});
+    console.error('Erro ao excluir paciente:', error)
+    res.status(500).json({ error: 'Erro interno no servidor.' })
   }
+}
+
+
 
 }
 

@@ -8,16 +8,14 @@ class ProfissionalRepository{
        return rows;
   }
   async findById(id){
-      const [row] = await db.query(`SELECT * FROM profissionais WHERE id = ? 
-        `,
+      const [row] = await db.query(`SELECT * FROM profissionais WHERE id = ?`,
       [id]
     )
        return row;
   }
 
     async findByNome(nome){
-      const [row] = await db.query(`SELECT * FROM profissionais WHERE nome = ? 
-        `,
+      const [row] = await db.query(`SELECT * FROM profissionais WHERE nome = ?`,
       [nome]
     )
        return row;
@@ -43,8 +41,7 @@ class ProfissionalRepository{
       return result;
   }
   async delete(id){
-     const deleteItem = await db.query(`DELETE FROM profissionais WHERE id = ? 
-      `,
+     const deleteItem = await db.query(`DELETE FROM profissionais WHERE id = ?`,
       [id]
     )
        return deleteItem;

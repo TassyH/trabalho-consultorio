@@ -33,8 +33,7 @@ class EspecialidadeRepository{
   }
 
   async delete(id){
-     const deleteItem = await db.query(`DELETE FROM especialidade WHERE id = ? 
-      `,
+     const deleteItem = await db.query(`DELETE FROM especialidade WHERE id = ?`,
       [id]
     )
        return deleteItem;
